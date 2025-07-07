@@ -17,7 +17,7 @@ app.use(
 app.use(bodyParser.json());
 
 // ✅ Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.AIzaSyD6w_ISf7F19kWV4dVSEluKllz0YO-5DuQ);
 
 // ✅ Home route
 app.get("/", (req, res) => {
