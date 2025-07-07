@@ -6,7 +6,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const app = express();
 const port = process.env.PORT || 3000;
 
-// ✅ CORS for your Firebase site
+// ✅ CORS for Firebase Hosting
 app.use(
   cors({
     origin: ["https://campus-loop-e722a.web.app"],
@@ -16,7 +16,7 @@ app.use(
 
 app.use(bodyParser.json());
 
-// ✅ Initialize Gemini
+// ✅ Initialize Gemini correctly!
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // ✅ Home route
@@ -30,13 +30,11 @@ app.post("/chatbot", async (req, res) => {
   console.log("Received:", userMessage);
 
   try {
-  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-
-  const result = await model.generateContent(userMessage);
-  const response = await result.response;
-  const text = response.text();
-
+    const result = await model.generateContent(userMessage);
+    const response = await result.response;
+    const text = response.text();
 
     res.json({ reply: text });
   } catch (err) {
