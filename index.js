@@ -6,18 +6,18 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(
-  cors({
-    origin: ["https://campus-loop-e722a.web.app"], // ✅ your Firebase hosting domain
-    methods: ["GET", "POST"],
-  })
-);
+// ✅ Use CORS with your Firebase Hosting URL
+app.use(cors({
+  origin: ["https://campus-loop-e722a.web.app"],
+  methods: ["GET", "POST"],
+}));
+
 app.use(bodyParser.json());
 
 // ✅ Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// ✅ Test route
+// ✅ Test home route
 app.get("/", (req, res) => {
   res.send("✅ Campus Loop Chatbot with Gemini is running!");
 });
@@ -40,6 +40,7 @@ app.post("/chatbot", async (req, res) => {
   }
 });
 
+// ✅ Start server
 app.listen(port, () => {
   console.log(`✅ Server running on port ${port}`);
 });
