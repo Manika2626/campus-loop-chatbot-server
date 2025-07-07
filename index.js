@@ -30,12 +30,12 @@ app.post("/chatbot", async (req, res) => {
   console.log("Received:", userMessage);
 
   try {
-    const model = genAI.getGenerativeModel({ model: "models/gemini-pro" });
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-    
-    const result = await model.generateContent(userMessage);
-    const response = await result.response;
-    const text = response.text();
+  const result = await model.generateContent(userMessage);
+  const response = await result.response;
+  const text = response.text();
+
 
     res.json({ reply: text });
   } catch (err) {
