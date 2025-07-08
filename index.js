@@ -1,48 +1,47 @@
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
-// ✅ CORS for Firebase Hosting
-app.use(
-  cors({
-    origin: ["https://campus-loop-e722a.web.app"],
-    methods: ["GET", "POST"],
-  })
-);
+app.use(cors());
+app.use(express.json());
 
-app.use(bodyParser.json());
-
-// ✅ Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-// ✅ Home route
 app.get("/", (req, res) => {
-  res.send("✅ Campus Loop Chatbot with Gemini is running!");
+  res.send("Campusloop Gemini API is running!");
 });
 
-// ✅ Chatbot route
-app.post("/chatbot", async (req, res) => {
-  const userMessage = req.body.message;
-  console.log("Received:", userMessage);
-
+app.post("/chat", async (req, res) => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const userPrompt = req.body.prompt;
+    console.log("User prompt:", userPrompt);
 
-    const result = await model.generateContent(userMessage);
+    // ✅ MOCK RESPONSE
+    res.json({
+      bot: `MOCK: You said "${userPrompt}". Here's a fake Campusloop feature idea!`
+    });
+
+    // ❌ Real Gemini call commented out for now:
+    /*
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" });
+    const result = await model.generateContent(userPrompt);
     const response = await result.response;
-    const text = response.text();
 
-    res.json({ reply: text });
-  } catch (err) {
-    console.error("❌ Gemini error:", err);
-    res.status(500).json({ reply: "❌ Sorry, I couldn't process that." });
+    res.json({
+      bot: response.text()
+    });
+    */
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong", details: error });
   }
 });
 
-app.listen(port, () => {
-  console.log(`✅ Server running on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
